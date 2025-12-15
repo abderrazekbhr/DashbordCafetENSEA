@@ -15,7 +15,8 @@ import pandas as pd
 from ml_grid import dicto
 from math import sqrt
 import subprocess
-
+from config_db import engine
+from models import User, Order, Prediction
 # Define models for optimization
 models = {
     'Lasso': (Lasso(), {'alpha': [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000]}),
@@ -23,10 +24,13 @@ models = {
     'KNN': (KNeighborsRegressor(), {'n_neighbors': [1, 3, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50], 'weights': ['uniform', 'distance'], 'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']}),
 }
 
+
 app =Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/',methods=['GET','POST'])
 def login():
@@ -77,16 +81,23 @@ def main_orders_salade():
     if(session.get("token")=="connected"):
         return render_template('/pages/saladeOrders.html',css_file="main.css",js_file="main.js")
     return redirect("/", code=302)
+
+
+
 @app.route('/main-orders-sandwich',methods=['GET'])
 def main_orders_sandwich():
     if(session.get("token")=="connected"):
         return render_template('/pages/sandwichOrders.html',css_file="main.css",js_file="main.js")
     return redirect("/", code=302)
+
+
 @app.route('/main-orders-viennoiseries',methods=['GET'])
 def main_orders_viennoiseries():
     if(session.get("token")=="connected"):
         return render_template('/pages/viennoiseriesOrders.html',css_file="main.css",js_file="main.js")
     return redirect("/", code=302) 
+
+
 @app.route('/main-orders-add',methods=['GET'])
 def main_orders_add():
     if(session.get("token")=="connected"):
@@ -469,9 +480,13 @@ def add_order():
             data['painsSuisses']
         ])
     return jsonify({'message': 'Order added successfully'})
+
+
 @app.errorhandler(404) 
 def default_url(e):
     return redirect("/", code=302) 
- 
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

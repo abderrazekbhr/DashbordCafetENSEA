@@ -34,4 +34,3 @@ for product in ["Pain au chocolat", "Croissant", "Pains suisses","Sandwiches pou
     
     # Store X_train and y_train in the data dictionary
     dicto[product] = {'X_train': X_train, 'y_train': y_train,'X_test': X_test, 'y_test': y_test}
-print("yes je me suis bien executé")
