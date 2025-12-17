@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,session,jsonify
 from flask_session import Session
 import csv
-from classes_and_functions.functions.login_test import test_login,update_data
+from classes_and_functions.functions.login_test import test_login
 from classes_and_functions.functions.read_data_csv import *
 from classes_and_functions.functions.write_to_csv import *
 from sklearn.model_selection import GridSearchCV
@@ -16,7 +16,8 @@ from ml_grid import dicto
 from math import sqrt
 import subprocess
 from config_db import engine
-from models import User, Order, Prediction
+from models import  Order, Prediction
+from script_db import *
 # Define models for optimization
 models = {
     'Lasso': (Lasso(), {'alpha': [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000]}),

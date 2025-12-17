@@ -6,5 +6,4 @@ model = pick.load(open("../pkl/knn.pkl","rb"))
 
 def predict():
     prediction = model.predict()
-    print(prediction)
     return render_template('index2.html', prediction=prediction.tolist())
