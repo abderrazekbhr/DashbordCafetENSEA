@@ -15,9 +15,10 @@ import pandas as pd
 from ml_grid import dicto
 from math import sqrt
 import subprocess
-from config_db import engine
-from models import  Order, Prediction
-from script_db import *
+from config_db import SessionLocal, engine,get_db
+from models import  Order, Prediction,Product,Category,product_order
+
+
 # Define models for optimization
 models = {
     'Lasso': (Lasso(), {'alpha': [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000]}),
@@ -49,7 +50,6 @@ def login():
 
 @app.route('/main-salade',methods=['GET'])
 def main_salade():
-    print(session.get("token"))
     if(session.get("token")=="connected"):
         return render_template('/pages/salade.html',css_file="main.css",js_file="main.js")
     return redirect("/", code=302) 
@@ -299,6 +299,10 @@ def logout():
 
 @app.route('/chart-data-salade',methods=['GET'])
 def chart_salade():
+    session= SessionLocal()
+    data=session.query(Order,product_order.c.product_id,product_order.c.quantity).join(product_order,Order.id==product_order.c.order_id).filter(product_order.c.product_id.in_(["Salade Thon","Salade Poulet"])).all()
+    session.close()
+    print(data)
     return get_data_by_column(["Date","Salade Thon","Salade Poulet"]) .to_json(orient='records') 
 
 @app.route('/chart-data-sandwich',methods=['GET'])
